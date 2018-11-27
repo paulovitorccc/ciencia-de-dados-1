@@ -78,6 +78,8 @@ Se considerarmos que temos apenas uma amostra de todos os programas de pós em C
 
 -----
 
+Como podemos observar a partir do modelo acima podemos observar que existe uma relação linear forte entre as variáveis 'Docentes permanentes' e 'Produção do programa', tendo em vista a dispersão dos pontos nas proximidades do modelo. Além disso o r.square (0.8145886) indica que o modelo explica bem os dados, por estar proximo de 1. Deste modo em virtude de sua correlação positiva inferimos que quanto maior a produção de artigos maior o numero de docentes permanentes.
+
 Algum palpite de por que a relação existe como ela existe em termos de força?
 
 ## Mais fatores
