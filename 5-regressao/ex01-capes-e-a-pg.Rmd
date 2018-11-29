@@ -7,6 +7,7 @@ output: html_notebook
 library(tidyverse)
 library(broom)
 library(modelr)
+library("GGally")
 theme_set(theme_bw())
 ```
 
@@ -74,11 +75,8 @@ Se considerarmos que temos apenas uma amostra de todos os programas de pós em C
 
 -----
 
-**EXPLICAÇÃO**: *Substitua esse texto por seu comentário. Comente tanto sobre as relações entre as variáveis (significância e relevância do efeito) quanto o quão bem o modelo explica os dados.*
-
+**EXPLICAÇÃO**: Como podemos observar a partir do modelo acima podemos observar que existe uma relação linear forte entre as variáveis 'Docentes permanentes' e 'Produção do programa', tendo em vista a dispersão dos pontos nas proximidades do modelo. Além disso o r.square (0.8145886) indica que o modelo explica bem os dados, por estar proximo de 1. Deste modo em virtude de sua correlação positiva inferimos que quanto maior a produção de artigos maior o numero de docentes permanentes.
 -----
-
-Como podemos observar a partir do modelo acima podemos observar que existe uma relação linear forte entre as variáveis 'Docentes permanentes' e 'Produção do programa', tendo em vista a dispersão dos pontos nas proximidades do modelo. Além disso o r.square (0.8145886) indica que o modelo explica bem os dados, por estar proximo de 1. Deste modo em virtude de sua correlação positiva inferimos que quanto maior a produção de artigos maior o numero de docentes permanentes.
 
 Algum palpite de por que a relação existe como ela existe em termos de força?
 
@@ -133,6 +131,28 @@ Considerando agora esses três fatores, o que podemos dizer sobre como cada um d
 Diferente de medirmos produção (total produzido), é medirmos produtividade (produzido / utilizado). Abaixo, crie um modelo que investigue como um conjunto de fatores que você julga que são relevantes se relacionam com a produtividade dos programas. Ou seja: 
 
   * Crie uma variável produtividade baseada na produção e nos docentes permanentes
+  
+```{r}
+cacc$produtividade = cacc$producao / cacc$`Docentes permanentes`
+```
+
   * Crie um modelo que avalie como pelo menos 4 fatores se relacionam com a produtividade de um programa. Pode reutilizar fatores que já definimos e analizamos para produção. Mas cuidado para não incluir fatores que sejam função linear de outros já incluídos (ex: incluir A, B e um tercero C=A+B)
+  
+  
+Criando correlograma
+  
+```{r}
+modelo3 = lm(produtividade ~ mestrados_pprof + doutorados_pprof, data = cacc)
+
+tidy(modelo3, conf.int = TRUE, conf.level = 0.95)
+glance(modelo3)
+```
+  
+```{r}
+# Correlation plot
+ggcorr(cacc, palette = "RdBu", label = TRUE)
+```
 
 Produza abaixo o modelo e um texto que comente (i) o modelo, tal como os que fizemos antes, e (ii) uma comparação entre as relações que você viu nesse modelo e no anterior (de produção) e por que as relações encontradas foram diferentes (se foram).
+
+
