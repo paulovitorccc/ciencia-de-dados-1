@@ -1,6 +1,8 @@
 ---
 title: "Regressão linear na prática"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r warning=FALSE, echo=FALSE}
@@ -122,37 +124,58 @@ Considerando agora esses três fatores, o que podemos dizer sobre como cada um d
 
 -----
 
-**EXPLICAÇÃO**: *Substitua esse texto por seu comentário. Comente tanto sobre as relações entre as variáveis (significância e relevância do efeito) quanto o quão bem o modelo explica os dados.*
+**EXPLICAÇÃO**: A relação das variáveis continua forte, e o modelo explica bem os dados tendo em vista que cobre outros pontos que anteriormente não eram considerados.
 
 -----
 
-## Agora produtividade 
-
 Diferente de medirmos produção (total produzido), é medirmos produtividade (produzido / utilizado). Abaixo, crie um modelo que investigue como um conjunto de fatores que você julga que são relevantes se relacionam com a produtividade dos programas. Ou seja: 
-
-  * Crie uma variável produtividade baseada na produção e nos docentes permanentes
   
 ```{r}
 cacc$produtividade = cacc$producao / cacc$`Docentes permanentes`
 ```
 
-  * Crie um modelo que avalie como pelo menos 4 fatores se relacionam com a produtividade de um programa. Pode reutilizar fatores que já definimos e analizamos para produção. Mas cuidado para não incluir fatores que sejam função linear de outros já incluídos (ex: incluir A, B e um tercero C=A+B)
-  
-  
-Criando correlograma
-  
+
+Para verificarmos quais fatores mais se relacionam com a produtividade iremos criar um correlograma da seguinte maneira.
+
 ```{r}
-modelo3 = lm(produtividade ~ mestrados_pprof + doutorados_pprof, data = cacc)
+# Correlation plot
+dados = cacc
+dados$Instituição = NULL
+dados$Instituição = NULL
+dados$Programa = NULL
+dados$Sigla = NULL
+dados$`Tem doutorado` = NULL
+dados$periodicos_A1 = NULL     
+dados$periodicos_A2 = NULL           
+dados$periodicos_B1 = NULL
+dados$periodicos_B2 = NULL            
+dados$periodicos_B3 = NULL          
+dados$periodicos_B4 = NULL         
+dados$periodicos_B5 = NULL         
+dados$periodicos_C = NULL        
+dados$periodicos_NA = NULL         
+dados$per_comaluno_A1 = NULL    
+dados$per_comaluno_A2 = NULL    
+dados$per_comaluno_B1 = NULL       
+dados$per_comaluno_B2 = NULL    
+dados$per_comaluno_B3 = NULL    
+dados$per_comaluno_B4 = NULL      
+dados$per_comaluno_B5 = NULL       
+dados$per_comaluno_C = NULL       
+dados$per_comaluno_NA = NULL    
+
+ggcorr(dados, hjust = 0.95, palette = "RdBu", label = TRUE)
+```
+
+Assim, podemos observar que as variaveis que mais se relacionam com produtividade são Artigos em conf, Nivel, doutorados_pprof e Teses.
+Deste modo o modelo ficaria:
+```{r}
+modelo3 = lm(produtividade ~ `Artigos em conf` + Nível + doutorados_pprof + Teses, data = cacc)
 
 tidy(modelo3, conf.int = TRUE, conf.level = 0.95)
 glance(modelo3)
 ```
   
-```{r}
-# Correlation plot
-ggcorr(cacc, palette = "RdBu", label = TRUE)
-```
-
-Produza abaixo o modelo e um texto que comente (i) o modelo, tal como os que fizemos antes, e (ii) uma comparação entre as relações que você viu nesse modelo e no anterior (de produção) e por que as relações encontradas foram diferentes (se foram).
+A relação foi diferente pois a observada anteriormente tinha relações explicitas, mas estas varíaveis também possuem uma relação linear forte. Tendo em vista o r.squared a relação é menor que a anterior.
 
 
